@@ -1,8 +1,3 @@
-// const dataTemp = {
-//     id:
-//     image: 
-//     name:
-// }
 
 const bag = {
     id: 'bag',
@@ -127,6 +122,6 @@ const wineGlass = {
 
 
 
-const productArray = [bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, usb, waterCan, wineGlass]
+const mainProductArray = [bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, usb, waterCan, wineGlass];
 
-export default productArray;
+export default mainProductArray;
