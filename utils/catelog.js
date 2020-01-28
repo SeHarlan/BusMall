@@ -85,7 +85,7 @@ const shark = {
 
 const sweep = {
     id: 'sweep',
-    image: 'sweep.jpg',
+    image: 'sweep.png',
     name: 'Baby Sweep'
 };
 

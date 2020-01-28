@@ -10,9 +10,9 @@ const testField = document.getElementById('test-field');
 const newProductArray = new SuperProductArray(mainProductArray);
 
 
-const choices = [newProductArray.getRandomProduct(), newProductArray.getRandomProduct(), newProductArray.getRandomProduct()]
-
-console.log(choices);
+const newChoices = newProductArray.generateRandomChoices();
 
 
-displayChoices(choices, testField);
+
+
+displayChoices(newChoices, testField);

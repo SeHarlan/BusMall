@@ -24,7 +24,20 @@ export function displayChoices(itemArray, elementToAppend) {
     });
 }
 
+export function generateRandomChoices(newArrayClass) {
+    let choiceOne = newArrayClass.getRandomProduct();
+    let choiceTwo = newArrayClass.getRandomProduct();
+    let choiceThree = newArrayClass.getRandomProduct();
 
+    //make sure they arent the same
+    while (choiceOne.id === choiceTwo.id || choiceOne.id === choiceThree) {
+        choiceOne = newArrayClass.getRandomProduct();
+    }
+    while (choiceTwo.id === choiceThree || choiceTwo.id === choiceOne.id) {
+        choiceTwo = newArrayClass.getRandomProduct();
+    }
+
+}
 
 
 
@@ -36,8 +49,26 @@ export class SuperProductArray {
 
     getRandomProduct() {
         const choiceIndex = Math.floor(Math.random() * this.products.length);
-
         return this.products[choiceIndex];
+    }
+
+    generateRandomChoices() {
+        let choiceOne = this.getRandomProduct();
+        let choiceTwo = this.getRandomProduct();
+        let choiceThree = this.getRandomProduct();
+    
+        //make sure they arent the same
+        while (choiceOne.id === choiceTwo.id || choiceOne.id === choiceThree) {
+            choiceOne = this.getRandomProduct();
+        }
+        while (choiceTwo.id === choiceThree || choiceTwo.id === choiceOne.id) {
+            choiceTwo = this.getRandomProduct();
+        }
+
+        //make sure it doesnt match last choice 
+        //tbd
+
+        return [choiceOne, choiceTwo, choiceThree];
     }
     
 }
