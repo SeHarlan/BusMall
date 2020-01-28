@@ -1,22 +1,26 @@
 export function displayChoices(itemArray, elementToAppend) {
 
     itemArray.forEach(item => {
+        const labelElement = document.createElement('label');
+
         const name = item.name;
         const nameElement = document.createElement('p');
         nameElement.textContent = name;
-        elementToAppend.appendChild(nameElement);
+        labelElement.appendChild(nameElement);
         
         const image = `../assets/${item.image}`;
         const imageElement = document.createElement('img');
         imageElement.alt = item.name;
         imageElement.src = image;
-        elementToAppend.appendChild(imageElement);
+        labelElement.appendChild(imageElement);
 
         const radioElement = document.createElement('input');
         radioElement.type = 'radio';
         radioElement.value = item.id;
         radioElement.name = 'choices';
-        elementToAppend.appendChild(radioElement);
+        labelElement.appendChild(radioElement);
+
+        elementToAppend.appendChild(labelElement);
     });
 }
 
