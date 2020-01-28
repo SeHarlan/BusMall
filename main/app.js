@@ -20,6 +20,8 @@ displayChoices(newChoices, testField);
 form.addEventListener('submit', (event) => {
     event.preventDefault();
     console.log(form);
+
     const voteData = new FormData(form);
+    
     calculateVotes(voteData);
 });

@@ -4,8 +4,6 @@ export function displayChoices(itemArray, elementToAppend) {
         const labelElement = document.createElement('label');
         labelElement.for = item.id;
 
-        console.log(labelElement.for);
-
         const name = item.name;
         const nameElement = document.createElement('p');
         nameElement.textContent = name;
