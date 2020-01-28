@@ -2,6 +2,9 @@ export function displayChoices(itemArray, elementToAppend) {
 
     itemArray.forEach(item => {
         const labelElement = document.createElement('label');
+        labelElement.for = item.id;
+
+        console.log(labelElement.for);
 
         const name = item.name;
         const nameElement = document.createElement('p');
@@ -11,6 +14,7 @@ export function displayChoices(itemArray, elementToAppend) {
         const radioElement = document.createElement('input');
         radioElement.type = 'radio';
         radioElement.value = item.id;
+        radioElement.id = item.id;
         radioElement.name = 'choices';
         radioElement.required = 'true';
         labelElement.appendChild(radioElement);
@@ -21,12 +25,15 @@ export function displayChoices(itemArray, elementToAppend) {
         imageElement.src = image;
         labelElement.appendChild(imageElement);
 
-        
-
         elementToAppend.appendChild(labelElement);
     });
 }
 
+export function calculateVotes(voteData) {
+
+
+    console.log(voteData);
+}
 
 
 
