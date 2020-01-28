@@ -4,6 +4,7 @@ import { displayChoices, SuperProductArray } from '../utils/functions.js';
 
 //dom
 const testField = document.getElementById('test-field');
+const form = document.getElementById('form');
 
 
 //state
