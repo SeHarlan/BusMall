@@ -2,8 +2,8 @@ import { getVoteData, findNameById } from '../utils/functions.js';
 import mainProductArray from '../utils/catelog.js';
 
 //dom
-const localResultField = document.getElementById('local-results');
-const globalResultField = document.getElementById('global-results');
+// const localResultField = document.getElementById('local-results');
+// const globalResultField = document.getElementById('global-results');
 
 
 //state
@@ -17,11 +17,37 @@ console.log(currentVoteData);
 const localNames = sortNames(currentVoteData);
 const localVotes = sortVotes(currentVoteData);
 
+//LOCAL CHART JS STUFF
+const ctx = document.getElementById('local-chart').getContext('2d');
+
+const labelColors = ['blue', 'yellow', 'green', 'purple', 'orange', 'red', 'blue', 'yellow', 'green', 'purple', 'orange', 'red', 'blue', 'yellow', 'green', 'purple', 'orange'];
+
+const localChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: localNames,
+        datasets: [{
+            label: '# of Votes',
+            data: localVotes,
+            backgroundColor: labelColors
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
 
 
-localResultField.textContent = localVotes;
 
 
+
+//functions
 
 function sortNames(data) {
     const names = [];
