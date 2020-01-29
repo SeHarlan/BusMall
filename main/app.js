@@ -6,22 +6,37 @@ import { displayChoices, SuperProductArray, calculateVotes } from '../utils/func
 const testField = document.getElementById('test-field');
 const form = document.querySelector('form');
 
-
 //state
-const newProductArray = new SuperProductArray(mainProductArray);
-
+let testCount, productVotes, newProductArray, currentProductsShown;
 
 
 //initialize page
+initializeState();
+
 const newChoices = newProductArray.generateRandomChoices();
 
-displayChoices(newChoices, testField);
+displayChoices(newChoices, testField, currentProductsShown); //and update currentProductsShown
 
+
+//respond to event
 form.addEventListener('submit', (event) => {
     event.preventDefault();
-    console.log(form);
-
     const voteData = new FormData(form);
-    
-    calculateVotes(voteData);
+
+    calculateVotes(voteData, productVotes, currentProductsShown);
+
+    //reached 25 tests logic
+    testCount++;
+    console.log(productVotes);
+    currentProductsShown = [];
+    const newNewChoices = newProductArray.generateRandomChoices();
+    displayChoices(newNewChoices, testField, currentProductsShown);
+
 });
+
+function initializeState() {
+    newProductArray = new SuperProductArray(mainProductArray);
+    testCount = 0;
+    productVotes = [];
+    currentProductsShown = [];
+}

@@ -1,4 +1,4 @@
-export function displayChoices(itemArray, elementToAppend) {
+export function displayChoices(itemArray, elementToAppend, currentProductsShown) {
 
     itemArray.forEach(item => {
         const labelElement = document.createElement('label');
@@ -24,13 +24,52 @@ export function displayChoices(itemArray, elementToAppend) {
         labelElement.appendChild(imageElement);
 
         elementToAppend.appendChild(labelElement);
+
+        currentProductsShown.push(item.id);
     });
 }
 
-export function calculateVotes(voteData) {
+export function calculateVotes(voteData, productVotes, currentProductsShown) {
 
+    const currentVote = voteData.get('choices');
+    
+    currentProductsShown.forEach(item => {
+        console.log(item);
+        //voted logic
+        if (item === currentVote) {
+            
+            //if in productvotes array
+            console.log(productVotes, currentVote);
+            if (matchProductId(productVotes, currentVote)) {
+                const currentObject = findById(productVotes, currentVote);
+                currentObject.voteCount++;
+                currentObject.item.shownCount++;
+                console.log(currentObject);
+            } else {
+                const newVoteData = {
+                    id: item,
+                    voteCount: 1,
+                    shownCount: 1
+                };
+                productVotes.push(newVoteData);
+            }
 
-    console.log(voteData);
+        } else {
+            //not voted logic
+            if (matchProductId(productVotes, item)) {
+                const currentShownProduct = findById(productVotes, item);
+                currentShownProduct.shownCount++;
+            } else {
+                const newShownData = {
+                    id: item,
+                    voteCount: 0,
+                    shownCount: 1
+                };
+                productVotes.push(newShownData);
+            }
+        }
+    });
+
 }
 
 
@@ -52,10 +91,8 @@ export class SuperProductArray {
         let choiceThree = this.getRandomProduct();
     
         //make sure they arent the same
-        while (choiceOne.id === choiceTwo.id || choiceOne.id === choiceThree) {
+        while (choiceOne.id === choiceTwo.id || choiceTwo.id === choiceThree.id || choiceThree.id === choiceOne.id) {
             choiceOne = this.getRandomProduct();
-        }
-        while (choiceTwo.id === choiceThree || choiceTwo.id === choiceOne.id) {
             choiceTwo = this.getRandomProduct();
         }
 
@@ -64,5 +101,26 @@ export class SuperProductArray {
 
         return [choiceOne, choiceTwo, choiceThree];
     }
+
     
+}
+
+function matchProductId(array, objectId) {
+    let match; 
+    array.forEach(item => {
+        if (item.id === objectId) {
+            match = true;
+        } else {
+            match = false;
+        }
+    });
+    return match;
+}
+
+function findById(array, itemId) {
+    array.forEach(item => {
+        if (item.id === itemId) {
+            return item;
+        }
+    });
 }
