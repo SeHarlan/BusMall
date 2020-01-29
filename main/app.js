@@ -1,5 +1,5 @@
 import mainProductArray from '../utils/catelog.js';
-import { displayChoices, SuperProductArray, calculateVotes } from '../utils/functions.js';
+import { displayChoices, SuperProductArray, calculateVotes, getVoteData } from '../utils/functions.js';
 
 
 //dom
@@ -7,7 +7,7 @@ const testField = document.getElementById('test-field');
 const form = document.querySelector('form');
 
 //state
-let testCount, productVotes, newProductArray, currentProductsShown;
+let testCount, newProductArray;
 
 
 //initialize page
@@ -15,28 +15,41 @@ initializeState();
 
 const newChoices = newProductArray.generateRandomChoices();
 
-displayChoices(newChoices, testField, currentProductsShown); //and update currentProductsShown
+displayChoices(newChoices, testField);
 
 
 //respond to event
 form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const voteData = new FormData(form);
+    // const voteData = new FormData(form);
+    const currentVote = document.querySelector('input[name="choices"]:checked').value;
 
-    calculateVotes(voteData, productVotes, currentProductsShown);
+    calculateVotes(currentVote);
+    
+    ////reached 25 tests logic
+    if (testCount > 25) {
+        window.location = './results';
+    } else {
+        testCount = testCount + 1;
+    }
+    
 
-    //reached 25 tests logic
-    testCount++;
-    console.log(productVotes);
-    currentProductsShown = [];
-    const newNewChoices = newProductArray.generateRandomChoices();
-    displayChoices(newNewChoices, testField, currentProductsShown);
+    reinitializeTestState();
 
 });
+
+function reinitializeTestState() {
+    currentProductsShown.forEach(object => {
+        const child = document.getElementById(object);
+        testField.removeChild(child);
+    });
+    
+    const newNewChoices = newProductArray.generateRandomChoices();
+    displayChoices(newNewChoices, testField, currentProductsShown);
+}
 
 function initializeState() {
     newProductArray = new SuperProductArray(mainProductArray);
     testCount = 0;
-    productVotes = [];
-    currentProductsShown = [];
+    
 }

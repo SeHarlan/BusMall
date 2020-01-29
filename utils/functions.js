@@ -1,8 +1,8 @@
-export function displayChoices(itemArray, elementToAppend, currentProductsShown) {
+export function displayChoices(itemArray, elementToAppend) {
 
     itemArray.forEach(item => {
         const labelElement = document.createElement('label');
-        labelElement.for = item.id;
+        labelElement.id = item.id;
 
         const name = item.name;
         const nameElement = document.createElement('p');
@@ -12,7 +12,7 @@ export function displayChoices(itemArray, elementToAppend, currentProductsShown)
         const radioElement = document.createElement('input');
         radioElement.type = 'radio';
         radioElement.value = item.id;
-        radioElement.id = item.id;
+        // radioElement.id = item.id;
         radioElement.name = 'choices';
         radioElement.required = 'true';
         labelElement.appendChild(radioElement);
@@ -24,51 +24,27 @@ export function displayChoices(itemArray, elementToAppend, currentProductsShown)
         labelElement.appendChild(imageElement);
 
         elementToAppend.appendChild(labelElement);
-
-        currentProductsShown.push(item.id);
     });
 }
 
-export function calculateVotes(voteData, productVotes, currentProductsShown) {
+export function calculateVotes(currentVote) {
 
-    const currentVote = voteData.get('choices');
+    const productVotesData = getVoteData();
     
-    currentProductsShown.forEach(item => {
-        console.log(item);
-        //voted logic
-        if (item === currentVote) {
-            
-            //if in productvotes array
-            console.log(productVotes, currentVote);
-            if (matchProductId(productVotes, currentVote)) {
-                const currentObject = findById(productVotes, currentVote);
-                currentObject.voteCount++;
-                currentObject.item.shownCount++;
-                console.log(currentObject);
-            } else {
-                const newVoteData = {
-                    id: item,
-                    voteCount: 1,
-                    shownCount: 1
-                };
-                productVotes.push(newVoteData);
-            }
+    const currentVoteObject = findById(productVotesData, currentVote);
+    console.log('current object', currentVoteObject);
+    if (currentVoteObject) {
+        currentVoteObject.votes++;
+    } else {
+        const newVoteObject = {
+            id: currentVote,
+            votes: 1
+        };
+        productVotesData.push(newVoteObject);
+    }
+    console.log('voteDataArray: ', productVotesData);
 
-        } else {
-            //not voted logic
-            if (matchProductId(productVotes, item)) {
-                const currentShownProduct = findById(productVotes, item);
-                currentShownProduct.shownCount++;
-            } else {
-                const newShownData = {
-                    id: item,
-                    voteCount: 0,
-                    shownCount: 1
-                };
-                productVotes.push(newShownData);
-            }
-        }
-    });
+    setVoteData(productVotesData);
 
 }
 
@@ -105,22 +81,31 @@ export class SuperProductArray {
     
 }
 
-function matchProductId(array, objectId) {
-    let match; 
+
+function findById(array, objectId) {
+    let foundObject;
     array.forEach(item => {
         if (item.id === objectId) {
-            match = true;
+            foundObject = item;
         } else {
-            match = false;
+            foundObject = false;
         }
     });
-    return match;
+    return foundObject;
 }
 
-function findById(array, itemId) {
-    array.forEach(item => {
-        if (item.id === itemId) {
-            return item;
-        }
-    });
+export function getVoteData() {
+    const stringyVoteData = localStorage.getItem('VOTES');
+    let voteData;
+    if (stringyVoteData) {
+        voteData = JSON.parse(stringyVoteData);
+    } else {
+        voteData = [];
+    }
+    return voteData;
+}
+
+export function setVoteData(voteDataArray) {
+    const parsedVoteData = JSON.stringify(voteDataArray);
+    localStorage.setItem('VOTES', parsedVoteData);
 }
