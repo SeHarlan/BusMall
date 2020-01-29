@@ -27,25 +27,32 @@ export function displayChoices(itemArray, elementToAppend) {
     });
 }
 
+export function removeChoices(elementsToRemove, parent) {
+    elementsToRemove.forEach(el => {
+        parent.removeChild(el);
+    });
+}
+
 export function calculateVotes(currentVote) {
 
     const productVotesData = getVoteData();
     
-    const currentVoteObject = findById(productVotesData, currentVote);
-    console.log('current object', currentVoteObject);
-    if (currentVoteObject) {
-        currentVoteObject.votes++;
+    const voteId = currentVote;
+    
+    const currentVoteIndex = findIndexById(productVotesData, voteId);
+
+    
+    if (currentVoteIndex) {
+        productVotesData[currentVoteIndex].votes++;
     } else {
         const newVoteObject = {
-            id: currentVote,
+            id: voteId,
             votes: 1
         };
         productVotesData.push(newVoteObject);
     }
-    console.log('voteDataArray: ', productVotesData);
 
     setVoteData(productVotesData);
-
 }
 
 
@@ -82,30 +89,27 @@ export class SuperProductArray {
 }
 
 
-function findById(array, objectId) {
-    let foundObject;
-    array.forEach(item => {
+function findIndexById(array, objectId) {
+    if (!array) return;
+    let foundIndex;
+    array.forEach((item, index) => {
         if (item.id === objectId) {
-            foundObject = item;
-        } else {
-            foundObject = false;
-        }
+            foundIndex = index;
+        } 
     });
-    return foundObject;
+    return foundIndex;
 }
 
 export function getVoteData() {
     const stringyVoteData = localStorage.getItem('VOTES');
-    let voteData;
-    if (stringyVoteData) {
-        voteData = JSON.parse(stringyVoteData);
-    } else {
-        voteData = [];
-    }
-    return voteData;
+    if (!stringyVoteData) return [];
+   
+    const voteInfo = JSON.parse(stringyVoteData);
+    return voteInfo;
+    
 }
 
 export function setVoteData(voteDataArray) {
-    const parsedVoteData = JSON.stringify(voteDataArray);
-    localStorage.setItem('VOTES', parsedVoteData);
+    const dataToSet = JSON.stringify(voteDataArray);
+    localStorage.setItem('VOTES', dataToSet);
 }
