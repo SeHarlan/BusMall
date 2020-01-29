@@ -50,7 +50,7 @@ const cthulhu = {
 const dogDuck = {
     id: 'dog-duck',
     image: 'dog-duck.jpg',
-    name: 'If you choose this you\'re a monster'
+    name: 'Duck dog Thing'
 };
 
 const dragon = {

@@ -26,7 +26,7 @@ form.addEventListener('submit', (event) => {
     
     calculateVotes(currentVote);
     
-    if (testCount > 25) {
+    if (testCount > 5) {
         window.location = './results';
     } else {
         testCount = testCount + 1;

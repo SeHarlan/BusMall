@@ -56,8 +56,6 @@ export function calculateVotes(currentVote) {
 }
 
 
-
-
 export class SuperProductArray {
     constructor(products) {
         this.products = [...products];
@@ -98,6 +96,17 @@ function findIndexById(array, objectId) {
         } 
     });
     return foundIndex;
+}
+
+export function findNameById(array, objectId) {
+    if (!array) return;
+    let foundName;
+    array.forEach(item => {
+        if (item.id === objectId) {
+            foundName = item.name;
+        }
+    });
+    return foundName;
 }
 
 export function getVoteData() {
