@@ -33,24 +33,43 @@ export function removeChoices(elementsToRemove, parent) {
     });
 }
 
-export function calculateVotes(currentVote) {
+export function calculateVotes(currentVote, elementsShown) {
 
     const productVotesData = getVoteData();
-    
     const voteId = currentVote;
     
-    const currentVoteIndex = findIndexById(productVotesData, voteId);
+    elementsShown.forEach(el => {
+        //deal with votes
+        if (el.id === voteId) {
 
-    
-    if (currentVoteIndex) {
-        productVotesData[currentVoteIndex].votes++;
-    } else {
-        const newVoteObject = {
-            id: voteId,
-            votes: 1
-        };
-        productVotesData.push(newVoteObject);
-    }
+            const currentVoteIndex = findIndexById(productVotesData, voteId);
+            if (currentVoteIndex) {
+                productVotesData[currentVoteIndex].votes++;
+                productVotesData[currentVoteIndex].shown++;
+            } else {
+                const newVoteObject = {
+                    id: voteId,
+                    votes: 1,
+                    shown: 1
+                };
+                productVotesData.push(newVoteObject);
+            }
+        } else {
+            //deal with shown data
+            const currentElIndex = findIndexById(productVotesData, el.id);
+            if (currentElIndex) {
+                productVotesData[currentElIndex].shown++;
+            } else {
+                const newShownObject = {
+                    id: el.id,
+                    votes: 0,
+                    shown: 1
+                }
+                productVotesData.push(newShownObject);
+            }
+        }
+
+    });
 
     setVoteData(productVotesData);
 }
@@ -66,19 +85,25 @@ export class SuperProductArray {
         return this.products[choiceIndex];
     }
 
-    generateRandomChoices() {
+    generateRandomChoices(prevShown) {
         let choiceOne = this.getRandomProduct();
         let choiceTwo = this.getRandomProduct();
         let choiceThree = this.getRandomProduct();
-    
+        
+        //make sure it doesnt match last choice 
+        // if (prevShown) {
+            
+        // }
+
+
+
         //make sure they arent the same
         while (choiceOne.id === choiceTwo.id || choiceTwo.id === choiceThree.id || choiceThree.id === choiceOne.id) {
             choiceOne = this.getRandomProduct();
             choiceTwo = this.getRandomProduct();
         }
 
-        //make sure it doesnt match last choice 
-        //tbd
+        
 
         return [choiceOne, choiceTwo, choiceThree];
     }

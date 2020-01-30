@@ -7,7 +7,7 @@ const testField = document.getElementById('test-field');
 const form = document.getElementById('form');
 
 //state
-let testCount, newProductArray;
+let testCount, newProductArray, prevShownProducts;
 
 
 //initialize page
@@ -24,21 +24,20 @@ form.addEventListener('submit', (event) => {
     const currentVote = document.querySelector('input[name="choices"]:checked').value;
     const currentElementsOnPage = document.querySelectorAll('label');
     
-    calculateVotes(currentVote);
+    calculateVotes(currentVote, currentElementsOnPage);
     
     if (testCount > 5) {
         window.location = './results';
     } else {
         testCount = testCount + 1;
     }
-
+    prevShownProducts = currentElementsOnPage;
     reinitializeTestState(currentElementsOnPage);
-
 });
 
 function reinitializeTestState(currentElementsOnPage) {
     removeChoices(currentElementsOnPage, testField);
-    const newNewChoices = newProductArray.generateRandomChoices();
+    const newNewChoices = newProductArray.generateRandomChoices(prevShownProducts);
     displayChoices(newNewChoices, testField);
 }
 
