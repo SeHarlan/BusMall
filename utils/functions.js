@@ -36,42 +36,18 @@ export function removeChoices(elementsToRemove, parent) {
 export function calculateVotes(currentVote, elementsShown) {
 
     const productVotesData = getVoteData();
+    const globalData = getGlobalData();
     const voteId = currentVote;
     
     elementsShown.forEach(el => {
         //deal with votes
-        if (el.id === voteId) {
-
-            const currentVoteIndex = findIndexById(productVotesData, voteId);
-            if (currentVoteIndex) {
-                productVotesData[currentVoteIndex].votes++;
-                productVotesData[currentVoteIndex].shown++;
-            } else {
-                const newVoteObject = {
-                    id: voteId,
-                    votes: 1,
-                    shown: 1
-                };
-                productVotesData.push(newVoteObject);
-            }
-        } else {
-            //deal with shown data
-            const currentElIndex = findIndexById(productVotesData, el.id);
-            if (currentElIndex) {
-                productVotesData[currentElIndex].shown++;
-            } else {
-                const newShownObject = {
-                    id: el.id,
-                    votes: 0,
-                    shown: 1
-                }
-                productVotesData.push(newShownObject);
-            }
-        }
+        updateData(el, voteId, productVotesData);
+        updateData(el, voteId, globalData);
 
     });
 
     setVoteData(productVotesData);
+    setGlobalData(globalData);
 }
 
 
@@ -112,6 +88,39 @@ export class SuperProductArray {
 }
 
 
+function updateData(el, voteId, dataArray) {
+    if (el.id === voteId) {
+        const currentVoteIndex = findIndexById(dataArray, voteId);
+        if (currentVoteIndex) {
+            dataArray[currentVoteIndex].votes++;
+            dataArray[currentVoteIndex].shown++;
+        }
+        else {
+            const newVoteObject = {
+                id: voteId,
+                votes: 1,
+                shown: 1
+            };
+            dataArray.push(newVoteObject);
+        }
+    }
+    else {
+        //deal with shown data
+        const currentElIndex = findIndexById(dataArray, el.id);
+        if (currentElIndex) {
+            dataArray[currentElIndex].shown++;
+        }
+        else {
+            const newShownObject = {
+                id: el.id,
+                votes: 0,
+                shown: 1
+            };
+            dataArray.push(newShownObject);
+        }
+    }
+}
+
 function findIndexById(array, objectId) {
     if (!array) return;
     let foundIndex;
@@ -143,7 +152,20 @@ export function getVoteData() {
     
 }
 
+export function getGlobalData() {
+    const stringyGlobalData = localStorage.getItem('GLOBAL');
+    if (!stringyGlobalData) return [];
+
+    const globalInfo = JSON.parse(stringyGlobalData);
+    return globalInfo;
+}
+
 export function setVoteData(voteDataArray) {
     const dataToSet = JSON.stringify(voteDataArray);
     localStorage.setItem('VOTES', dataToSet);
+}
+
+export function setGlobalData(globalDataArray) {
+    const dataToSet = JSON.stringify(globalDataArray);
+    localStorage.setItem('GLOBAL', dataToSet);
 }

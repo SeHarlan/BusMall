@@ -26,7 +26,7 @@ form.addEventListener('submit', (event) => {
     
     calculateVotes(currentVote, currentElementsOnPage);
     
-    if (testCount > 5) {
+    if (testCount > 25) {
         window.location = './results';
     } else {
         testCount = testCount + 1;
@@ -44,5 +44,6 @@ function reinitializeTestState(currentElementsOnPage) {
 function initializeState() {
     newProductArray = new SuperProductArray(mainProductArray);
     testCount = 0;
+    localStorage.removeItem('VOTES')
     
 }

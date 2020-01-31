@@ -1,18 +1,11 @@
-import { getVoteData, findNameById } from '../utils/functions.js';
+import { getVoteData, findNameById, getGlobalData } from '../utils/functions.js';
 import mainProductArray from '../utils/catelog.js';
 
 
 
 //state
 const currentVoteData = getVoteData();
-
-setGlobalData(currentVoteData);
-
 const globalVoteData = getGlobalData();
-
-console.log('current:', currentVoteData);
-console.log('global:', globalVoteData);
-
 
 
 //do things
@@ -20,8 +13,13 @@ const localNames = sortNames(currentVoteData);
 const localVotes = sortVotes(currentVoteData);
 const localShown = sortShown(currentVoteData);
 
+const globalNames = sortNames(globalVoteData);
+const globalVotes = sortVotes(globalVoteData);
+const globalShown = sortShown(globalVoteData);
+
 //LOCAL CHART JS STUFF
 const ctx = document.getElementById('local-chart').getContext('2d');
+const ctx2 = document.getElementById('global-chart').getContext('2d');
 
 const labelColors = ['blue', 'yellow', 'green', 'purple', 'orange', 'red', 'blue', 'yellow', 'green', 'purple', 'orange', 'red', 'blue', 'yellow', 'green', 'purple', 'orange', 'red', 'blue', 'yellow', 'green', 'purple', 'orange'];
 
@@ -50,6 +48,31 @@ const localChart = new Chart(ctx, {
     }
 });
 
+
+const globalChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: globalNames,
+        datasets: [{
+            label: '# of Votes',
+            data: globalVotes,
+            backgroundColor: labelColors
+        }, {
+            label: 'Times shown',
+            data: globalShown,
+            backgroundColor: 'grey'
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
 
 
 
@@ -83,35 +106,3 @@ function sortShown(data) {
     return shownArray;
 }
 
-function getGlobalData() {
-    let globalArray = [];
-    const round = JSON.parse(localStorage.getItem('ROUND'));
-    if (!round) return;
-    for (let i = 1; i <= round; i++) {
-        const roundKey = `VOTEROUND${i}`;
-        const dataToGet = localStorage.getItem(roundKey);
-        globalArray.push(dataToGet);
-    }
-    return globalArray;
-}
-
-function setGlobalData(localData) {
-    const dataToPush = JSON.stringify(localData);
-    const parentData = getGlobalData();
-    if (!parentData) {
-        const roundToPush = JSON.stringify(1);
-        localStorage.setItem('ROUND', roundToPush);
-        localStorage.setItem('VOTEROUND1', dataToPush);
-    } else {
-        parentData.push(dataToPush);
-        const roundToPush = JSON.stringify(parentData.length)
-        localStorage.setItem('ROUND', roundToPush);
-        
-        for (let k = 1; k <= parentData.length; k++) {
-            const roundKey = `VOTEROUND${k}`;
-            const dataToSet = JSON.stringify(parentData[k - 1]);
-            localStorage.setItem(roundKey, dataToSet);
-        }
-    }
-    localStorage.removeItem('VOTES');
-}
